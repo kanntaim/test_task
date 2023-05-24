@@ -18,6 +18,7 @@ public class ChatSteps {
     private final AudioAttachmentModal audioAttachmentModal = new AudioAttachmentModal();
     private final PhotoAttachmentModal photoAttachmentModal = new PhotoAttachmentModal();
     private final MessangerPage messangerPage = new MessangerPage();
+
     @Step("Открыть Мессенджер")
     public void openMessenger(){
         leftMenuForm.clickMenuItem(LeftMenuForm.Item.MESSENGER);
@@ -35,14 +36,15 @@ public class ChatSteps {
     public void attachPhoto(File photo){
         conversationForm.selectMediaSelector(ConversationForm.MediaSelectorItem.PHOTO);
         photoAttachmentModal.uploadFile(photo);
+        conversationForm.waitForPhotoToLoad();
     }
 
     @Step("Прикрепить первую аудиозапись из сохранённых")
     public void attachFirstAudio(){
         conversationForm.selectMediaSelector(ConversationForm.MediaSelectorItem.AUDIO);
         audioAttachmentModal.attachFirstAudio();
-        conversationForm.waitForPhotoToLoad();
     }
+
     @Step("Отправить сообщение")
     public void sendMessage(){
         conversationForm.clickSendButton();
@@ -58,6 +60,7 @@ public class ChatSteps {
     public void assertLastMessageContainsPhoto(){
         Assert.assertTrue(conversationForm.isPhotoPresentInLastMessage(), "There is no photo in last message");
     }
+
     @Step("Проверить, что в последнем сообщении есть аудио")
     public void assertLastMessageContainsAudio(){
         Assert.assertTrue(conversationForm.isAudioPresentInLastMessage(), "There is no audio in last message");
@@ -77,8 +80,8 @@ public class ChatSteps {
 
     @Step("Проверить, что id последнего сообщения изменился")
     private void assertNewMessageAdded(Long lastMessageId){
-        Assert.assertEquals(conversationForm.getLastMessageDataTsOrZero(), lastMessageId,
-                "Incorrect messageId in last message, probably new message wasn't sent");}
+        Assert.assertNotEquals(conversationForm.getLastMessageDataTsOrZero(), lastMessageId,
+                "MessageId in last message is the same but should be different");}
 
 
 }

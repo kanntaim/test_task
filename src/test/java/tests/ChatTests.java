@@ -12,7 +12,7 @@ public class ChatTests extends BaseVkUiTest {
     private final ChatSteps chatSteps = new ChatSteps();
 
     @Test
-    public void createChatAndSendMessageWithMusic(){
+    public void createChatAndSendMessageWithAudio(){
         String randomChatName = RandomUtils.generateUniqueRandomString();
         chatSteps.openMessenger();
 

@@ -1,6 +1,9 @@
 package pages.forms.chat;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import enums.CssConstants;
 import lombok.Getter;
 import pages.BasePage;
@@ -39,6 +42,7 @@ public class ConversationForm extends BasePage {
     private final ElementsCollection messages = $$("._im_mess");
     private final SelenideElement photoAttachUnsent = $(".im-chat-input--attaches .thumb_wrap");
     private final SelenideElement chatName = $(".im-page--title-main-inner");
+    private final SelenideElement messageLoader = $(".im-preloader");
 
     public ConversationForm() {
         super($("._im_page_history"));
@@ -50,7 +54,7 @@ public class ConversationForm extends BasePage {
     }
 
     public void clickSendButton(){
-        sendButton.shouldBe(Condition.visible).click();
+        sendButton.shouldBe(Condition.interactable).click();
     }
 
     public Long getLastMessageDataTsOrZero(){
@@ -78,10 +82,7 @@ public class ConversationForm extends BasePage {
 
     private SelenideElement getLastMessage() {
         waitForPageToLoad();
-        if(messages.isEmpty()){
-            return null;
-        }
-        return messages.shouldHave(CollectionCondition.sizeGreaterThan(0))
-                .last().scrollIntoView(false);
+        messageLoader.shouldNot(Condition.exist);
+        return messages.isEmpty() ? null : messages.last().scrollIntoView(false);
     }
 }

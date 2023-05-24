@@ -20,6 +20,4 @@ public class LoginPage extends BasePage {
     public void clickSignInButton(){
         signInButton.shouldBe(Condition.interactable).click();
     }
-
-
 }
